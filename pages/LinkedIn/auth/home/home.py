@@ -2,6 +2,7 @@ from selenium.webdriver.common.by import By
 
 from pages import Page
 from pages.LinkedIn.auth.home.single_post import PageSinglePost
+from pages.LinkedIn.auth.all_recent_activity import PageAllRecentActivity
 
 
 class PageHome(Page):
@@ -22,3 +23,10 @@ class PageHome(Page):
         self.get(post_url)
 
         return PageSinglePost(self.driver, self.logger)
+
+    def open_all_activity_link(self, all_activity_url):
+        """Opens all activity link to post"""
+
+        self.get(all_activity_url)
+
+        return PageAllRecentActivity(self.driver, self.logger)
