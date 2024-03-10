@@ -36,7 +36,7 @@ class PageHomePublic(Page):
             self.wait_for_a_while(Common.generate_random_numbers(2, 4))
             self.click(*self.btn_verify)
 
-        self.wait_for_a_while(Common.generate_random_numbers(100, 120))
+        self.wait_for_a_while(Common.generate_random_numbers(20, 60))
         if self.is_displayed(*self.txt_email_or_phone):
             self.wait_for_a_while(Common.generate_random_numbers(3, 10))
             self.send_keys(*self.txt_email_or_phone, email_or_phone)
