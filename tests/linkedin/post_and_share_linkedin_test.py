@@ -5,6 +5,9 @@ from pages.LinkedIn.auth.home.single_post import PageSinglePost
 from pages.LinkedIn.public.PageHomePublic import PageHomePublic
 from nrobo.util.common import Common
 
+counter_file = "Counter.yaml"
+count_groups = "count_groups"
+
 
 class TestPostAndShareNRoBoUpdates:
 
@@ -25,7 +28,7 @@ class TestPostAndShareNRoBoUpdates:
         page_home = page_home_public.login(cred['username'], cred['password'])
 
         page_home_public.wait_for_a_while(Common.generate_random_numbers(2, 5))
-        page_single_post = page_home.open_post_link(data['all_activity_url'])
+        page_single_post = page_home.open_post_link(data['post_url'])
 
         repost_options = page_single_post.repost()
 
@@ -38,14 +41,23 @@ class TestPostAndShareNRoBoUpdates:
 
         group_names = select_a_group_modal.group_names()
 
-        exclude_group_names = ['Ruby on Rails', 'Bluetooth Wi-Fi']
+        # Common.write_yaml(counter_file, {count_groups: len(group_names)})
+        # print(group_names)
+        # index = group_names.index("Penetration Testing / Ethical Hacking")
+        # logger.info(f"{group_names[index]}")
+
+        exclude_group_names = ['Ruby on Rails', 'Bluetooth Wi-Fi', 'Software Testing and QA ']
 
         # Iterate through all groups and repost to each of the group_name
         for idx, group_name in enumerate(group_names):
 
+            # if idx < index:
+            #     continue
+
             if group_name in exclude_group_names:
                 continue  # skip share
 
+            logger.info(f"idx={idx} groug-name={group_name}")
             post_settings_modal = select_a_group_modal.select_a_group_and_save(group_name)
             post_settings_modal.wait_for_a_while(Common.generate_random_numbers(2, 8))
 
@@ -89,20 +101,5 @@ class TestPostAndShareNRoBoUpdates:
         page_home_public.wait_for_a_while(Common.generate_random_numbers(2, 5))
         page_all_recent_activity = page_home.open_all_activity_link(data['all_activity_url'])
 
-        page_all_recent_activity.like_all_recent_posts()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        count = Common.read_yaml(counter_file)
+        page_all_recent_activity.like_all_recent_posts(count[count_groups])
