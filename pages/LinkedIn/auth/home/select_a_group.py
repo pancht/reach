@@ -1,6 +1,7 @@
 from selenium.common import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
+from selenium.webdriver.common.actions.mouse_button import MouseButton
 
 from pages import Page
 
@@ -25,7 +26,11 @@ class PageSelectAGroup(Page):
 
     def select_a_group_and_save(self, group_name: str) -> Page:
         # select a group
-        group_element_by_name = self.find_element(By.XPATH, f"//fieldset//span[text()='{group_name}']")
+        group_element_xpath = f'//fieldset//span[text()="{group_name}"]'
+
+        group_element_by_name = self.find_element(By.XPATH, group_element_xpath)
+
+        self.wait_for_a_while(1)
         group_element_by_name.click()
 
         self.wait_for_a_while(1)

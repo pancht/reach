@@ -13,15 +13,15 @@ class PageAllRecentActivity(Page):
     hdr_all_activity = (By.CSS_SELECTOR, '.text-heading-large')
     btn_react_like = (By.CSS_SELECTOR, "button[aria-label='React Like'][aria-pressed='false']")
 
-    def like_all_recent_posts(self):
+    def like_all_recent_posts(self, count_groups):
         """Like all recent posts under recent actvity page"""
 
-        for count in range(60):
+        for count in range(int(count_groups)+10):
             self.wait_for_page_to_be_loaded()
             self.scroll_down()
             self.wait_for_a_while(Common.generate_random_numbers(1, 3))
 
-        # self.find_element(*self.hdr_all_activity)
+        self.wait_for_a_while(Common.generate_random_numbers(1, 3))
         self.scroll_to_top()
         self.wait_for_a_while(Common.generate_random_numbers(2, 4))
         all_likes = self.find_elements(*self.btn_react_like)
