@@ -1,5 +1,8 @@
-linkedin_url: https://www.linkedin.com/
-thought: Apply addition browser command line switches using nRoBo Test Automation Framework.
-post_url: https://www.linkedin.com/feed/update/urn:li:share:7172769381985181696/
-# All activity
-all_activity_url: https://www.linkedin.com/in/einsteinpanchdev/recent-activity/all/
+linkedin:
+  linkedin_url: https://www.linkedin.com/
+  thought: Gmail login using nRoBo Test Automation Framework.
+  post_url: https://www.linkedin.com/feed/update/urn:li:share:7173362335443628032/
+  # All activity
+  all_activity_url: https://www.linkedin.com/in/einsteinpanchdev/recent-activity/all/
+youtube:
+  gmail_login_url: https://accounts.google.com/servicelogin?hl=en-gb

@@ -1,7 +1,7 @@
 from selenium.webdriver.common.by import By
 
 from pages import Page
-from pages.LinkedIn.auth.home.post_settings import PagePostSettings
+from pages.linkedin.auth.home.post_settings import PagePostSettings
 
 
 class PagePostModal(Page):
@@ -37,7 +37,7 @@ class PagePostModal(Page):
         if self.is_displayed(*self.btn_discard):
             self.click(*self.btn_discard)
 
-        from pages.LinkedIn.auth.home.single_post import PageSinglePost
+        from pages.linkedin.auth.home.single_post import PageSinglePost
         return PageSinglePost(self.driver, self.logger)
 
     def close(self):

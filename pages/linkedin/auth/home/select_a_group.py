@@ -1,7 +1,4 @@
-from selenium.common import TimeoutException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.remote.webelement import WebElement
-from selenium.webdriver.common.actions.mouse_button import MouseButton
 
 from pages import Page
 
@@ -36,5 +33,5 @@ class PageSelectAGroup(Page):
         self.wait_for_a_while(1)
         self.click(*self.btn_save) if self.is_enabled(*self.btn_save) else self.click(*self.btn_back)
 
-        from pages.LinkedIn.auth.home.post_settings import PagePostSettings
+        from pages.linkedin.auth.home.post_settings import PagePostSettings
         return PagePostSettings(self.driver, self.logger)

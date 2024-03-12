@@ -1,7 +1,7 @@
+from nrobo.util.common import Common
 from selenium.webdriver.common.by import By
 
 from pages import Page
-from nrobo.util.common import Common
 
 
 class PageAllRecentActivity(Page):
