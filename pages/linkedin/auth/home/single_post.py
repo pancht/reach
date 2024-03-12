@@ -1,8 +1,7 @@
 from selenium.webdriver.common.by import By
 
 from pages import Page
-
-from pages.LinkedIn.auth.home.repost_options import PageRePostOptions
+from pages.linkedin.auth.home.repost_options import PageRePostOptions
 
 
 class PageSinglePost(Page):

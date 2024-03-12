@@ -1,8 +1,7 @@
-from selenium.common import TimeoutException
 from selenium.webdriver.common.by import By
 
 from pages import Page
-from pages.LinkedIn.auth.home.select_a_group import PageSelectAGroup
+from pages.linkedin.auth.home.select_a_group import PageSelectAGroup
 
 
 class PagePostSettings(Page):
@@ -25,5 +24,5 @@ class PagePostSettings(Page):
     def post(self):
         self.click(*self.btn_done) if self.is_enabled(*self.btn_done) else self.click(*self.btn_back)
 
-        from pages.LinkedIn.auth.home.post_modal import PagePostModal
+        from pages.linkedin.auth.home.post_modal import PagePostModal
         return PagePostModal(self.driver, self.logger)

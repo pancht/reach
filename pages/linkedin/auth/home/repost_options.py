@@ -1,8 +1,7 @@
 from selenium.webdriver.common.by import By
 
 from pages import Page
-from pages.LinkedIn.auth.home import post_modal
-from pages.LinkedIn.auth.home.post_modal import PagePostModal
+from pages.linkedin.auth.home.post_modal import PagePostModal
 
 
 class PageRePostOptions(Page):
