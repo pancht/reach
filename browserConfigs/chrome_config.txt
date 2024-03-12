@@ -1,1 +1,2 @@
 --start-maximized
+--lang=en-US

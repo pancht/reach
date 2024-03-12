@@ -3,6 +3,9 @@ from nrobo.util.common import Common
 
 from pages.linkedin.auth.home.post_modal import PagePostModal
 from pages.linkedin.public.PageHomePublic import PageHomePublic
+from pages.youtube.auth.playlists import PagePlaylists
+from pages.youtube.auth.watch_playlist_view import PageWatchPlaylist
+from pages.youtube.auth.youtube_home import PageYouTube
 from pages.youtube.public.gmail_login import PageGmailLogin
 
 counter_file = "Counter.yaml"
@@ -118,7 +121,11 @@ class TestPostAndShareNRoBoUpdates:
         """Watch YouTube Channel nRoBo Test Automation Framework"""
 
         page_gmail_login = PageGmailLogin(driver=driver, logger=logger)
+        page_gmail_login.maximize_window()
+
         page_gmail_email_phone = page_gmail_login.open_gmail_login_url()
+
+        page_gmail_email_phone.wait_for_a_while(2)
 
         logger.info(f"Enter email")
         page_gmail_email_phone.email_or_phone(username)
@@ -127,7 +134,34 @@ class TestPostAndShareNRoBoUpdates:
         logger.info(f"Enter password")
         page_gmail_password.password(password)
         page_gmail_mailbox = page_gmail_password.next()
+        page_youtube = page_gmail_mailbox.open_youtube_url()
 
+        # Infinite watching of nRoBo playlist
+        watch_nrobo_playlist(page_youtube.driver, page_youtube.logger)
+
+
+def watch_nrobo_playlist(driver, logger):
+    """Watch nrobo playlist for infinite time"""
+
+    page_youtube = PageYouTube(driver, logger)
+    page_playlists = page_youtube.search("nrobo")
+    page_playlists.click_link_view_nrobo_full_playlist()
+
+    # page_watch_playlist = page_playlists.click_play_all()
+    page_watch_playlist = PageWatchPlaylist(page_playlists.driver, page_playlists.logger)
+
+    page_watch_playlist.click_loop_playlist_button()
+    page_watch_playlist.click_shuffle_playlist_button()
+
+    while True:
+        page_watch_playlist.click_like_video()
+        page_watch_playlist.click_volume_control_and_set_playback_speed_2x()
+        page_watch_playlist.wait_for_a_while(40)
+
+        if not page_watch_playlist.current_playlist_is_nrobo():
+            break
+
+    watch_nrobo_playlist(driver, logger)  # Infinite call loop, needed though dangerous
 
 
 
