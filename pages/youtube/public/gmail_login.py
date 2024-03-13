@@ -107,7 +107,7 @@ class PageGmailLoginPassword(Page):
         self.wait_for_a_while(self.generate_random_numbers(3, 8))
         self.click(*self.btn_next)
 
-        self.wait_for_a_while(self.generate_random_numbers(2, 5))
+        self.wait_for_a_while(self.generate_random_numbers(15, 20))
         self.get('https://gmail.com')
         self.wait_for_a_while(self.generate_random_numbers(2, 5))
 
