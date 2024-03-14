@@ -56,7 +56,7 @@ class TestPostAndShareNRoBoUpdates:
         # index = group_names.index("Penetration Testing / Ethical Hacking")
         # logger.info(f"{group_names[index]}")
 
-        exclude_group_names = ['Ruby on Rails', 'Bluetooth Wi-Fi', 'Software Testing and QA ']
+        exclude_group_names = ['Ruby on Rails', 'Bluetooth Wi-Fi', 'Software Testing and QA ', 'nRoBo Test Automation Framework']
 
         # Iterate through all groups and repost to each of the group_name
         for idx, group_name in enumerate(group_names):
@@ -156,10 +156,14 @@ def watch_nrobo_playlist(driver, logger):
     while True:
         page_watch_playlist.click_like_video()
         page_watch_playlist.click_volume_control_and_set_playback_speed_2x()
-        page_watch_playlist.wait_for_a_while(40)
+        page_watch_playlist.wait_for_a_while(10 * 60)
 
         if not page_watch_playlist.current_playlist_is_nrobo():
             break
+
+        page_watch_playlist.refresh()
+        page_watch_playlist.click_loop_playlist_button()
+        page_watch_playlist.click_shuffle_playlist_button()
 
     watch_nrobo_playlist(driver, logger)  # Infinite call loop, needed though dangerous
 

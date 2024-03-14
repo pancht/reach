@@ -1,7 +1,7 @@
 linkedin:
   linkedin_url: https://www.linkedin.com/
-  thought: Gmail login using nRoBo Test Automation Framework.
-  post_url: https://www.linkedin.com/feed/update/urn:li:share:7173362335443628032/
+  thought: Learn how to build a test automation framework from scratch by exploring the nRoBo Test Automation Framework code base.
+  post_url: https://www.linkedin.com/feed/update/urn:li:groupPost:8165478-7173567576717881344/
   # All activity
   all_activity_url: https://www.linkedin.com/in/einsteinpanchdev/recent-activity/all/
 youtube:
