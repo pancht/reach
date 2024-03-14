@@ -38,9 +38,12 @@ class PageWatchPlaylist(Page):
 
     def click_like_video(self):
         """Like video if it is not yet liked by the current user"""
-        if self.is_displayed(*self.btn_i_like_this):
-            self.click(*self.btn_i_like_this)
-            self.wait_for_a_while(3)
+        try:
+            if self.is_displayed(*self.btn_i_like_this):
+                self.click(*self.btn_i_like_this)
+                self.wait_for_a_while(3)
+        except Exception as e:
+            pass
 
     def current_playlist_is_nrobo(self):
         """Check if current playlist is nRoBo Test Automation Framework"""
@@ -57,23 +60,27 @@ class PageWatchPlaylist(Page):
         player = self.find_element(*self.div_player)
         btn_share = self.find_element(By.CSS_SELECTOR, "div[id='actions'] button[aria-label='Share']")
 
-        self.action_chain() \
-            .move_to_element(player) \
-            .pause(2).click(self.find_element(*self.btn_volume_control))\
-            .perform()
-
         if self.is_displayed(*self.btn_volume_control):
             try:
                 self.action_chain() \
-                    .move_to_element(player) \
-                    .pause(2).click(self.find_element(*self.btn_volume_control)) \
                     .pause(2).click(self.find_element(*self.btn_settings_control)) \
                     .perform()
-            except Exception as e:
+
                 self.action_chain() \
-                    .pause(2).click(self.find_element(*self.btn_volume_control)) \
+                    .pause(2).click(self.find_element(*self.opt_playback_speed)) \
+                    .perform()
+
+                self.action_chain() \
+                    .pause(2).click(self.find_element(*self.opt_playback_speed_2x)) \
+                    .perform()
+
+                self.action_chain() \
+                    .move_to_element(player) \
                     .pause(2).click(self.find_element(*self.btn_settings_control)) \
                     .perform()
+
+            except Exception as e:
+                pass
 
         else:
             try:
@@ -81,23 +88,21 @@ class PageWatchPlaylist(Page):
                     .move_to_element(player) \
                     .pause(2).click(self.find_element(*self.btn_settings_control)) \
                     .perform()
-            except Exception as e:
+
                 self.action_chain() \
-                    .pause(2).click(self.find_element(*self.btn_settings_control)) \
+                    .pause(2).click(self.find_element(*self.opt_playback_speed)) \
                     .perform()
 
-        self.action_chain() \
-            .pause(2).click(self.find_element(*self.opt_playback_speed)) \
-            .perform()
+                self.action_chain() \
+                    .pause(2).click(self.find_element(*self.opt_playback_speed_2x)) \
+                    .perform()
 
-        self.action_chain() \
-            .pause(2).click(self.find_element(*self.opt_playback_speed_2x)) \
-            .perform()
-
-        self.action_chain() \
-            .move_to_element(player) \
-            .pause(2).click(self.find_element(*self.btn_settings_control)) \
-            .perform()
+                self.action_chain() \
+                    .move_to_element(player) \
+                    .pause(2).click(self.find_element(*self.btn_settings_control)) \
+                    .perform()
+            except Exception as e:
+                pass
 
         self.wait_for_page_to_be_loaded()
         self.wait_for_a_while(3)

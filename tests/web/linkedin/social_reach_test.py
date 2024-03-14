@@ -132,23 +132,28 @@ class TestPostAndShareNRoBoUpdates:
         page_gmail_password = page_gmail_email_phone.next()
 
         logger.info(f"Enter password")
-        page_gmail_password.password(password)
-        page_gmail_mailbox = page_gmail_password.next()
-        page_youtube = page_gmail_mailbox.open_youtube_url()
+        try:
+            page_gmail_password.password(password)
+            page_gmail_mailbox = page_gmail_password.next()
+            page_youtube = page_gmail_mailbox.open_youtube_url()
+        except Exception as e:
+            pass
 
         # Infinite watching of nRoBo playlist
-        watch_nrobo_playlist(page_youtube.driver, page_youtube.logger)
+        watch_nrobo_playlist(driver, logger)
 
 
 def watch_nrobo_playlist(driver, logger):
     """Watch nrobo playlist for infinite time"""
 
     page_youtube = PageYouTube(driver, logger)
+    page_youtube.wait_for_a_while(page_youtube.generate_random_numbers(5, 7))
+
     page_playlists = page_youtube.search("nrobo")
     page_playlists.click_link_view_nrobo_full_playlist()
 
     # page_watch_playlist = page_playlists.click_play_all()
-    page_watch_playlist = PageWatchPlaylist(page_playlists.driver, page_playlists.logger)
+    page_watch_playlist = PageWatchPlaylist(driver, logger)
 
     page_watch_playlist.click_loop_playlist_button()
     page_watch_playlist.click_shuffle_playlist_button()
@@ -162,6 +167,8 @@ def watch_nrobo_playlist(driver, logger):
             break
 
         page_watch_playlist.refresh()
+        page_watch_playlist.wait_for_page_to_be_loaded()
+
         page_watch_playlist.click_loop_playlist_button()
         page_watch_playlist.click_shuffle_playlist_button()
 
