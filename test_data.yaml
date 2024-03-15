@@ -1,7 +1,7 @@
 linkedin:
   linkedin_url: https://www.linkedin.com/
-  thought: Grab the URL, Username, & Password from the command line to nRoBo Test Automation Framework.
-  post_url: https://www.linkedin.com/feed/update/urn:li:activity:7173893306517585920/
+  thought: Positive vibes! Thanks Python Community!!!
+  post_url: https://www.linkedin.com/feed/update/urn:li:groupPost:8165478-7174036425091276801/
   # All activity
   all_activity_url: https://www.linkedin.com/in/einsteinpanchdev/recent-activity/all/
 youtube:
