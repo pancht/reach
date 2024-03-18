@@ -1,7 +1,7 @@
 linkedin:
   linkedin_url: https://www.linkedin.com/
-  thought: Positive vibes! Thanks Python Community!!!
-  post_url: https://www.linkedin.com/feed/update/urn:li:groupPost:8165478-7174036425091276801/
+  thought: Here is the video explaining how to rerun failed tests to handle flaky tests and how to set rerun delay between each of the invocation of tests in nRoBo test automation framework
+  post_url: https://www.linkedin.com/feed/update/urn:li:groupPost:8165478-7175011400707153920/
   # All activity
   all_activity_url: https://www.linkedin.com/in/einsteinpanchdev/recent-activity/all/
 youtube:

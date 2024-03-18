@@ -1,3 +1,5 @@
+import os
+
 import pytest
 from nrobo.util.common import Common
 
@@ -16,6 +18,10 @@ test_data_yaml_file = 'test_data.yaml'
 
 youtube_test_data = Common.read_yaml(cred_yaml_file)['youtube']
 youtube_users = [(cred['username'], cred['password']) for cred in youtube_test_data]
+
+channel_list = Common.read_yaml(cred_yaml_file)['youtube_channel_list']
+keyword_list = Common.read_yaml(cred_yaml_file)['youtube_keyword_list']
+channel_name_keyword_list = [(channel_list[idx], keyword_list[idx]) for idx, keyword in enumerate(keyword_list)]
 
 
 class TestPostAndShareNRoBoUpdates:
@@ -50,19 +56,22 @@ class TestPostAndShareNRoBoUpdates:
         select_a_group_modal.wait_for_a_while(Common.generate_random_numbers(1, 5))
 
         group_names = select_a_group_modal.group_names()
+        # Common.write_yaml("groups.yaml", group_names)
+        # exit()
 
         # Common.write_yaml(counter_file, {count_groups: len(group_names)})
         # print(group_names)
-        # index = group_names.index("Penetration Testing / Ethical Hacking")
+        index = group_names.index("QA / Testing strategic group")
         # logger.info(f"{group_names[index]}")
 
-        exclude_group_names = ['Ruby on Rails', 'Bluetooth Wi-Fi', 'Software Testing and QA ', 'nRoBo Test Automation Framework']
+        exclude_group_names = ['Ruby on Rails', 'Bluetooth Wi-Fi', 'Software Testing and QA ',
+                               'nRoBo Test Automation Framework']
 
         # Iterate through all groups and repost to each of the group_name
         for idx, group_name in enumerate(group_names):
 
-            # if idx < index:
-            #     continue
+            if idx < index:
+                continue
 
             if group_name in exclude_group_names:
                 continue  # skip share
@@ -131,11 +140,18 @@ class TestPostAndShareNRoBoUpdates:
         page_gmail_email_phone.email_or_phone(username)
         page_gmail_password = page_gmail_email_phone.next()
 
+        os.environ['channel_1'] = page_gmail_password.current_window_handle
+
         logger.info(f"Enter password")
         try:
             page_gmail_password.password(password)
             page_gmail_mailbox = page_gmail_password.next()
             page_youtube = page_gmail_mailbox.open_youtube_url()
+
+            # open new window for Panchdev Singh Chauhan channel
+            page_youtube.switch_to_new_tab()
+            page_youtube = page_gmail_mailbox.open_youtube_url()
+            os.environ['channel_2'] = page_gmail_password.current_window_handle
         except Exception as e:
             pass
 
@@ -146,13 +162,29 @@ class TestPostAndShareNRoBoUpdates:
 def watch_nrobo_playlist(driver, logger):
     """Watch nrobo playlist for infinite time"""
 
-    page_youtube = PageYouTube(driver, logger)
-    page_youtube.wait_for_a_while(page_youtube.generate_random_numbers(5, 7))
+    channel_1 = channel_name_keyword_list[0][0]
+    channel_1_keyword = channel_name_keyword_list[0][1]
+    channel_2 = channel_name_keyword_list[1][0]
+    channel_2_keyword = channel_name_keyword_list[1][1]
+    os.environ['current_playlist'] = ""
 
-    page_playlists = page_youtube.search("nrobo")
-    page_playlists.click_link_view_nrobo_full_playlist()
+    page_youtube_home_auth = PageYouTube(driver, logger)
+    page_youtube_home_auth.wait_for_a_while(page_youtube_home_auth.generate_random_numbers(5, 7))
 
-    # page_watch_playlist = page_playlists.click_play_all()
+    if page_youtube_home_auth.current_window_handle == os.environ['channel_2']:
+        page_youtube_home_auth.switch_to_window(os.environ['channel_1'])
+        os.environ['current_playlist'] = channel_1
+    elif page_youtube_home_auth.current_window_handle == os.environ['channel_1']:
+        page_youtube_home_auth.switch_to_window(os.environ['channel_2'])
+        os.environ['current_playlist'] = channel_2
+
+    if page_youtube_home_auth.current_window_handle == os.environ['channel_1']:
+        page_playlists = page_youtube_home_auth.search(keyword=channel_1_keyword, channel_name=channel_1)
+        page_playlists.click_link_view_full_playlist(channel_name=channel_1)
+    elif page_youtube_home_auth.current_window_handle == os.environ['channel_2']:
+        page_playlists = page_youtube_home_auth.search(keyword=channel_2_keyword, channel_name=channel_2)
+        page_playlists.click_link_view_full_playlist(channel_name=channel_2)
+
     page_watch_playlist = PageWatchPlaylist(driver, logger)
 
     page_watch_playlist.click_loop_playlist_button()
@@ -161,9 +193,9 @@ def watch_nrobo_playlist(driver, logger):
     while True:
         page_watch_playlist.click_like_video()
         page_watch_playlist.click_volume_control_and_set_playback_speed_2x()
-        page_watch_playlist.wait_for_a_while(10 * 60)
+        page_watch_playlist.wait_for_a_while(3 * 60 * 60)  # 3 hour
 
-        if not page_watch_playlist.current_playlist_is_nrobo():
+        if not page_watch_playlist.current_playlist_matches(os.environ['current_playlist']):
             break
 
         page_watch_playlist.refresh()
@@ -173,13 +205,3 @@ def watch_nrobo_playlist(driver, logger):
         page_watch_playlist.click_shuffle_playlist_button()
 
     watch_nrobo_playlist(driver, logger)  # Infinite call loop, needed though dangerous
-
-
-
-
-
-
-
-
-
-
