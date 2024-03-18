@@ -61,7 +61,7 @@ class TestPostAndShareNRoBoUpdates:
 
         # Common.write_yaml(counter_file, {count_groups: len(group_names)})
         # print(group_names)
-        index = group_names.index("QA / Testing strategic group")
+        # index = group_names.index("QA / Testing strategic group")
         # logger.info(f"{group_names[index]}")
 
         exclude_group_names = ['Ruby on Rails', 'Bluetooth Wi-Fi', 'Software Testing and QA ',
@@ -70,8 +70,8 @@ class TestPostAndShareNRoBoUpdates:
         # Iterate through all groups and repost to each of the group_name
         for idx, group_name in enumerate(group_names):
 
-            if idx < index:
-                continue
+            # if idx < index:
+            #     continue
 
             if group_name in exclude_group_names:
                 continue  # skip share
