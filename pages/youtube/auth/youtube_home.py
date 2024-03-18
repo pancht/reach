@@ -22,6 +22,8 @@ class PageYouTube(Page):
     # Page methods
     def search(self, keyword: str, channel_name: str):
         """Search keyword"""
+        self.wait_for_page_to_be_loaded()
+        self.wait_for_a_while(self.generate_random_numbers(3, 7))
         self.clear(*self.txt_search)
         self.send_keys(*self.txt_search, keyword)
 
@@ -35,7 +37,7 @@ class PageYouTube(Page):
         self.click(*self.tab_playlists)
         self.wait_for_page_to_be_loaded()
 
-        if 'tour' in link_channel_search_result:
+        if 'tour' in link_channel_search_result[1]:
             lnk_tour_travels_playlist = (By.CSS_SELECTOR, "a[title='8. Tours and Travels']")
             self.click(*lnk_tour_travels_playlist)
             self.wait_for_page_to_be_loaded()
