@@ -172,10 +172,10 @@ def watch_nrobo_playlist(driver, logger):
     page_youtube_home_auth.wait_for_a_while(page_youtube_home_auth.generate_random_numbers(5, 7))
 
     if page_youtube_home_auth.current_window_handle == os.environ['channel_2']:
-        page_youtube_home_auth.switch_to_window(titles[0])
+        page_youtube_home_auth.switch_to_window(page_youtube_home_auth.windows[titles[0]])
         os.environ['current_playlist'] = channel_1
     elif page_youtube_home_auth.current_window_handle == os.environ['channel_1']:
-        page_youtube_home_auth.switch_to_window(titles[1])
+        page_youtube_home_auth.switch_to_window(page_youtube_home_auth.windows[titles[1]])
         os.environ['current_playlist'] = channel_2
 
     if page_youtube_home_auth.current_window_handle == os.environ['channel_1']:
