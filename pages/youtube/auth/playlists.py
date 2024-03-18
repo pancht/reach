@@ -13,17 +13,16 @@ class PagePlaylists(Page):
         super().__init__(driver=driver, logger=logger)
 
     # Page elements
-    lnk_view_nrobo_full_playlist = (By.XPATH,
-                                    "//div[contains(@class,'ytd-grid-playlist-rendere')]"
-                                    "/h3/a[@title='nRoBo Test Automation Framework']")
-
     lnk_play_all_nrobo_videos = (By.CSS_SELECTOR,
                                  ".thumbnail-and-metadata-wrapper a[aria-label='Play all']")
 
     # Page methods
-    def click_link_view_nrobo_full_playlist(self):
+    def click_link_view_full_playlist(self, channel_name: str = None):
         """Click on View nRoBo full playlist"""
-        self.click(*self.lnk_view_nrobo_full_playlist)
+        lnk_view_nrobo_full_playlist = (By.XPATH,
+                                        f"//div[contains(@class,'ytd-grid-playlist-rendere')]"
+                                        f"/h3/a[@title='{channel_name}']")
+        self.click(*lnk_view_nrobo_full_playlist)
         self.wait_for_a_while(4)
         self.wait_for_page_to_be_loaded()
 
@@ -34,4 +33,3 @@ class PagePlaylists(Page):
         self.wait_for_page_to_be_loaded()
 
         return PageWatchPlaylist(self.driver, self.logger)
-

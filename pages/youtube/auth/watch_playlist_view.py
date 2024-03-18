@@ -9,7 +9,7 @@ class PageWatchPlaylist(Page):
     # Page elements
     btn_loop_playlist = (By.CSS_SELECTOR, "ytd-page-manager button[aria-label='Loop playlist']")
     btn_playlist_un_shuffled = (
-    By.CSS_SELECTOR, "ytd-page-manager button[aria-label='Shuffle playlist'][aria-pressed='false']")
+        By.CSS_SELECTOR, "ytd-page-manager button[aria-label='Shuffle playlist'][aria-pressed='false']")
     btn_playlist_shuffled = (
         By.CSS_SELECTOR, "ytd-page-manager button[aria-label='Shuffle playlist'][aria-pressed='true']")
 
@@ -58,12 +58,11 @@ class PageWatchPlaylist(Page):
         except Exception as e:
             pass
 
-    def current_playlist_is_nrobo(self):
+    def current_playlist_matches(self, current_playlist: str):
         """Check if current playlist is nRoBo Test Automation Framework"""
-        header_nrobo_test_automation_framework = (By.XPATH,
-                                                  "//div[@id='secondary']"
-                                                  "//h3//a[text()='nRoBo Test Automation Framework']")
-        if self.is_displayed(*header_nrobo_test_automation_framework):
+        header_channel_name = (By.XPATH,
+                               f"//div[@id='secondary']//h3//a[text()='{current_playlist}']")
+        if self.is_displayed(*header_channel_name):
             return True
 
         return False

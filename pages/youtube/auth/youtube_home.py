@@ -17,14 +17,10 @@ class PageYouTube(Page):
 
     btn_search = (By.ID, "search-icon-legacy")
 
-    link_channel_nrobo_in_search_result = (By.XPATH,
-                                           "//ytd-channel-renderer"
-                                           "//yt-formatted-string[text()='nRoBo Test Automation Framework']")
-
     tab_playlists = (By.XPATH, "//div[@id='tabsContent']//div[text()='Playlists']")
 
     # Page methods
-    def search(self, keyword: str):
+    def search(self, keyword: str, channel_name: str):
         """Search keyword"""
         self.clear(*self.txt_search)
         self.send_keys(*self.txt_search, keyword)
@@ -32,10 +28,17 @@ class PageYouTube(Page):
         self.click(*self.btn_search)
         self.wait_for_page_to_be_loaded()
 
+        link_channel_nrobo_in_search_result = (By.XPATH,
+                                               f"//ytd-channel-renderer//yt-formatted-string[text()='{channel_name}']")
         self.click(*self.link_channel_nrobo_in_search_result)
         self.wait_for_page_to_be_loaded()
 
         self.click(*self.tab_playlists)
         self.wait_for_page_to_be_loaded()
+
+        if 'tour' in link_channel_nrobo_in_search_result:
+            lnk_tour_travels_playlist = (By.CSS_SELECTOR, "a[title='8. Tours and Travels']")
+            self.click(*lnk_tour_travels_playlist)
+            self.wait_for_page_to_be_loaded()
 
         return PagePlaylists(self.driver, self.logger)
