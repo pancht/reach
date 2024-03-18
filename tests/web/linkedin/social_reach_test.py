@@ -12,6 +12,7 @@ from pages.youtube.public.gmail_login import PageGmailLogin
 
 counter_file = "Counter.yaml"
 count_groups = "count_groups"
+titles = ['youtube_1', 'youtube_2']
 
 cred_yaml_file = 'cred.yaml'
 test_data_yaml_file = 'test_data.yaml'
@@ -140,18 +141,17 @@ class TestPostAndShareNRoBoUpdates:
         page_gmail_email_phone.email_or_phone(username)
         page_gmail_password = page_gmail_email_phone.next()
 
-        os.environ['channel_1'] = page_gmail_password.current_window_handle
-
         logger.info(f"Enter password")
         try:
             page_gmail_password.password(password)
             page_gmail_mailbox = page_gmail_password.next()
+            page_gmail_mailbox.title = titles[0]
             page_youtube = page_gmail_mailbox.open_youtube_url()
 
             # open new window for Panchdev Singh Chauhan channel
             page_youtube.switch_to_new_tab()
+            page_youtube.title = titles[1]
             page_youtube = page_gmail_mailbox.open_youtube_url()
-            os.environ['channel_2'] = page_gmail_password.current_window_handle
         except Exception as e:
             pass
 
@@ -172,10 +172,10 @@ def watch_nrobo_playlist(driver, logger):
     page_youtube_home_auth.wait_for_a_while(page_youtube_home_auth.generate_random_numbers(5, 7))
 
     if page_youtube_home_auth.current_window_handle == os.environ['channel_2']:
-        page_youtube_home_auth.switch_to_window(os.environ['channel_1'])
+        page_youtube_home_auth.switch_to_window(titles[0])
         os.environ['current_playlist'] = channel_1
     elif page_youtube_home_auth.current_window_handle == os.environ['channel_1']:
-        page_youtube_home_auth.switch_to_window(os.environ['channel_2'])
+        page_youtube_home_auth.switch_to_window(titles[1])
         os.environ['current_playlist'] = channel_2
 
     if page_youtube_home_auth.current_window_handle == os.environ['channel_1']:
