@@ -28,15 +28,14 @@ class PageYouTube(Page):
         self.click(*self.btn_search)
         self.wait_for_page_to_be_loaded()
 
-        link_channel_nrobo_in_search_result = (By.XPATH,
-                                               f"//ytd-channel-renderer//yt-formatted-string[text()='{channel_name}']")
-        self.click(*self.link_channel_nrobo_in_search_result)
+        link_channel_search_result = (By.XPATH, f"//ytd-channel-renderer//yt-formatted-string[text()='{channel_name}']")
+        self.click(*link_channel_search_result)
         self.wait_for_page_to_be_loaded()
 
         self.click(*self.tab_playlists)
         self.wait_for_page_to_be_loaded()
 
-        if 'tour' in link_channel_nrobo_in_search_result:
+        if 'tour' in link_channel_search_result:
             lnk_tour_travels_playlist = (By.CSS_SELECTOR, "a[title='8. Tours and Travels']")
             self.click(*lnk_tour_travels_playlist)
             self.wait_for_page_to_be_loaded()
