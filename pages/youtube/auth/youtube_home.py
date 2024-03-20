@@ -24,13 +24,14 @@ class PageYouTube(Page):
         """Search keyword"""
         self.wait_for_page_to_be_loaded()
         self.wait_for_a_while(self.generate_random_numbers(3, 7))
+
         self.clear(*self.txt_search)
         self.send_keys(*self.txt_search, keyword)
-
         self.click(*self.btn_search)
         self.wait_for_page_to_be_loaded()
 
         link_channel_search_result = (By.XPATH, f"//ytd-channel-renderer//yt-formatted-string[text()='{channel_name}']")
+        self.wait_for_a_while(10)
         self.click(*link_channel_search_result)
         self.wait_for_page_to_be_loaded()
 
