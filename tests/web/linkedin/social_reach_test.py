@@ -196,7 +196,7 @@ def watch_nrobo_playlist(driver, logger):
     while True:
         page_watch_playlist.click_like_video()
         page_watch_playlist.click_volume_control_and_set_playback_speed_2x()
-        page_watch_playlist.wait_for_a_while(15 * 60)  # 15 min
+        page_watch_playlist.wait_for_a_while(30 * 60)  # 30 min
 
         if page_watch_playlist.current_window_handle == os.environ['channel_2']:
             page_watch_playlist.switch_to_window(os.environ['channel_1'])
