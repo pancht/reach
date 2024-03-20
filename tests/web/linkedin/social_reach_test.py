@@ -158,6 +158,8 @@ class TestPostAndShareNRoBoUpdates:
         except Exception as e:
             pass
 
+        os.environ['channel_1_searched'] = '0'
+        os.environ['channel_2_searched'] = '0'
         # Infinite watching of nRoBo playlist
         watch_nrobo_playlist(driver, logger)
 
@@ -169,58 +171,57 @@ def watch_nrobo_playlist(driver, logger):
     channel_1_keyword = channel_name_keyword_list[0][1]
     channel_2 = channel_name_keyword_list[1][0]
     channel_2_keyword = channel_name_keyword_list[1][1]
+    channel_1_playlist = channel_1
+    channel_2_playlist = playlist_list[0]
     os.environ['current_playlist'] = ""
 
-    print(f"Start with handle={driver.current_window_handle}")
     page_youtube_home_auth = PageYouTube(driver, logger)
-    print(f"After init={page_youtube_home_auth.current_window_handle}")
     page_youtube_home_auth.wait_for_a_while(page_youtube_home_auth.generate_random_numbers(5, 7))
 
-    if page_youtube_home_auth.current_window_handle == os.environ['channel_2']:
-        page_youtube_home_auth.switch_to_window(os.environ['channel_1'])
-        os.environ['current_playlist'] = channel_1
-    elif page_youtube_home_auth.current_window_handle == os.environ['channel_1']:
-        page_youtube_home_auth.switch_to_window(os.environ['channel_2'])
-        os.environ['current_playlist'] = channel_2
-
-    # page_youtube_home_auth = PageYouTube(driver, logger)
-    print(f"1st handle={page_youtube_home_auth.current_window_handle}")
-    if page_youtube_home_auth.current_window_handle == os.environ['channel_1']:
-        print(f"1st INSIDE handle={page_youtube_home_auth.current_window_handle}")
+    if page_youtube_home_auth.current_window_handle == os.environ['channel_1'] \
+            and int(os.environ['channel_1_searched']) == 0:
         page_playlists = page_youtube_home_auth.search(keyword=channel_1_keyword, channel_name=channel_1)
         page_playlists.click_link_view_full_playlist(channel_name=channel_1)
-    elif page_youtube_home_auth.current_window_handle == os.environ['channel_2']:
-        print(f"2nd INSIDE handle={page_youtube_home_auth.current_window_handle}")
+        os.environ['channel_1_searched'] = '1'
+
+        page_watch_playlist = PageWatchPlaylist(driver, logger)
+
+        page_watch_playlist.click_loop_playlist_button()
+        page_watch_playlist.click_shuffle_playlist_button()
+
+    elif page_youtube_home_auth.current_window_handle == os.environ['channel_2'] \
+            and int(os.environ['channel_2_searched']) == 0:
         page_playlists = page_youtube_home_auth.search(
             keyword=channel_2_keyword,
             channel_name=channel_2,
-            playlist_name=playlist_list[0])
+            playlist_name=channel_2_playlist)
         # first playlist from list of playlists
         page_playlists.click_link_view_full_playlist(channel_name=channel_2)
+        os.environ['channel_2_searched'] = '1'
 
-    page_watch_playlist = PageWatchPlaylist(driver, logger)
+        page_watch_playlist = PageWatchPlaylist(driver, logger)
 
-    page_watch_playlist.click_loop_playlist_button()
-    page_watch_playlist.click_shuffle_playlist_button()
+        page_watch_playlist.click_loop_playlist_button()
+        page_watch_playlist.click_shuffle_playlist_button()
 
     while True:
-        page_watch_playlist.click_like_video()
-        page_watch_playlist.click_volume_control_and_set_playback_speed_2x()
-        page_watch_playlist.wait_for_a_while(10)  # 30 min
+        try:
+            page_watch_playlist.click_like_video()
+            page_watch_playlist.click_volume_control_and_set_playback_speed_2x()
+            page_watch_playlist.wait_for_a_while(60 * 60)  # 1 hour
+        except Exception as e:
+            pass
 
-        break
-        # print("before switch")
-        # print(f"current_handle={page_watch_playlist.current_window_handle}")
-        # if page_watch_playlist.current_window_handle == os.environ['channel_2']:
-        #     page_watch_playlist.switch_to_window(os.environ['channel_1'])
-        #     os.environ['current_playlist'] = channel_1
-        # elif page_watch_playlist.current_window_handle == os.environ['channel_1']:
-        #     page_watch_playlist.switch_to_window(os.environ['channel_2'])
-        #     os.environ['current_playlist'] = channel_2
-        # print("After switch")
-        # print(f"current_handle={page_watch_playlist.current_window_handle}")
-
-        if not page_watch_playlist.current_playlist_matches(os.environ['current_playlist']):
+        # switch channel
+        if page_watch_playlist.current_window_handle == os.environ['channel_1'] \
+                and not page_watch_playlist.current_playlist_matches(channel_1_playlist):
+            os.environ['channel_1_searched'] = '0'
+            page_watch_playlist.switch_to_window(os.environ['channel_1'])
+            break
+        elif page_watch_playlist.current_window_handle == os.environ['channel_2'] \
+                and not page_watch_playlist.current_playlist_matches(channel_2_playlist):
+            os.environ['channel_2_searched'] = '0'
+            page_watch_playlist.switch_to_window(os.environ['channel_2'])
             break
 
         page_watch_playlist.refresh()
@@ -229,4 +230,11 @@ def watch_nrobo_playlist(driver, logger):
         page_watch_playlist.click_loop_playlist_button()
         page_watch_playlist.click_shuffle_playlist_button()
 
+        # swap channel
+        if page_youtube_home_auth.current_window_handle == os.environ['channel_1']:
+            page_youtube_home_auth.switch_to_window(os.environ['channel_2'])
+        elif page_youtube_home_auth.current_window_handle == os.environ['channel_2']:
+            page_youtube_home_auth.switch_to_window(os.environ['channel_1'])
+
     watch_nrobo_playlist(driver, logger)  # Infinite call loop, needed though dangerous
+

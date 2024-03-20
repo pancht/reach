@@ -35,19 +35,24 @@ class PageWatchPlaylist(Page):
     def click_shuffle_playlist_button(self):
         """Click on Shuffle Playlist button"""
 
-        random_number = self.generate_random_numbers(3, 20)
-        if random_number % 2 == 0:
-            # if Even number, then choose shuffle playlist
-            if self.is_displayed(*self.btn_playlist_un_shuffled):
-                # if shuffle playlist not selected, then shuffle playlist
-                self.click(*self.btn_playlist_un_shuffled)
-                self.wait_for_a_while(3)
-        else:
-            # if odd number, then choose not to shuffle playlist
-            if self.is_displayed(*self.btn_playlist_shuffled):
-                # if shuffle playlist not selected, then shuffle playlist
-                self.click(*self.btn_playlist_shuffled)
-                self.wait_for_a_while(3)
+        if self.is_displayed(*self.btn_playlist_un_shuffled):
+            # if shuffle playlist not selected, then shuffle playlist
+            self.click(*self.btn_playlist_un_shuffled)
+            self.wait_for_a_while(3)
+
+        # random_number = self.generate_random_numbers(3, 20)
+        # if random_number % 2 == 0:
+        #     # if Even number, then choose shuffle playlist
+        #     if self.is_displayed(*self.btn_playlist_un_shuffled):
+        #         # if shuffle playlist not selected, then shuffle playlist
+        #         self.click(*self.btn_playlist_un_shuffled)
+        #         self.wait_for_a_while(3)
+        # else:
+        #     # if odd number, then choose not to shuffle playlist
+        #     if self.is_displayed(*self.btn_playlist_shuffled):
+        #         # if shuffle playlist not selected, then shuffle playlist
+        #         self.click(*self.btn_playlist_shuffled)
+        #         self.wait_for_a_while(3)
 
     def click_like_video(self):
         """Like video if it is not yet liked by the current user"""
