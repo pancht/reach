@@ -17,11 +17,13 @@ count_groups = "count_groups"
 cred_yaml_file = 'cred.yaml'
 test_data_yaml_file = 'test_data.yaml'
 
-youtube_test_data = Common.read_yaml(cred_yaml_file)['youtube']
+cred_data = Common.read_yaml(cred_yaml_file)
+youtube_test_data = cred_data['youtube']
 youtube_users = [(cred['username'], cred['password']) for cred in youtube_test_data]
 
-channel_list = Common.read_yaml(cred_yaml_file)['youtube_channel_list']
-keyword_list = Common.read_yaml(cred_yaml_file)['youtube_keyword_list']
+channel_list = cred_data['youtube_channel_list']
+keyword_list = cred_data['youtube_keyword_list']
+playlist_list = cred_data['playlist_list']
 channel_name_keyword_list = [(channel_list[idx], keyword_list[idx]) for idx, keyword in enumerate(keyword_list)]
 
 
@@ -169,7 +171,9 @@ def watch_nrobo_playlist(driver, logger):
     channel_2_keyword = channel_name_keyword_list[1][1]
     os.environ['current_playlist'] = ""
 
+    print(f"Start with handle={driver.current_window_handle}")
     page_youtube_home_auth = PageYouTube(driver, logger)
+    print(f"After init={page_youtube_home_auth.current_window_handle}")
     page_youtube_home_auth.wait_for_a_while(page_youtube_home_auth.generate_random_numbers(5, 7))
 
     if page_youtube_home_auth.current_window_handle == os.environ['channel_2']:
@@ -179,13 +183,19 @@ def watch_nrobo_playlist(driver, logger):
         page_youtube_home_auth.switch_to_window(os.environ['channel_2'])
         os.environ['current_playlist'] = channel_2
 
-    page_youtube_home_auth = PageYouTube(driver, logger)
-
+    # page_youtube_home_auth = PageYouTube(driver, logger)
+    print(f"1st handle={page_youtube_home_auth.current_window_handle}")
     if page_youtube_home_auth.current_window_handle == os.environ['channel_1']:
+        print(f"1st INSIDE handle={page_youtube_home_auth.current_window_handle}")
         page_playlists = page_youtube_home_auth.search(keyword=channel_1_keyword, channel_name=channel_1)
         page_playlists.click_link_view_full_playlist(channel_name=channel_1)
     elif page_youtube_home_auth.current_window_handle == os.environ['channel_2']:
-        page_playlists = page_youtube_home_auth.search(keyword=channel_2_keyword, channel_name=channel_2)
+        print(f"2nd INSIDE handle={page_youtube_home_auth.current_window_handle}")
+        page_playlists = page_youtube_home_auth.search(
+            keyword=channel_2_keyword,
+            channel_name=channel_2,
+            playlist_name=playlist_list[0])
+        # first playlist from list of playlists
         page_playlists.click_link_view_full_playlist(channel_name=channel_2)
 
     page_watch_playlist = PageWatchPlaylist(driver, logger)
@@ -196,14 +206,19 @@ def watch_nrobo_playlist(driver, logger):
     while True:
         page_watch_playlist.click_like_video()
         page_watch_playlist.click_volume_control_and_set_playback_speed_2x()
-        page_watch_playlist.wait_for_a_while(30 * 60)  # 30 min
+        page_watch_playlist.wait_for_a_while(10)  # 30 min
 
-        if page_watch_playlist.current_window_handle == os.environ['channel_2']:
-            page_watch_playlist.switch_to_window(os.environ['channel_1'])
-            os.environ['current_playlist'] = channel_1
-        elif page_watch_playlist.current_window_handle == os.environ['channel_1']:
-            page_watch_playlist.switch_to_window(os.environ['channel_2'])
-            os.environ['current_playlist'] = channel_2
+        break
+        # print("before switch")
+        # print(f"current_handle={page_watch_playlist.current_window_handle}")
+        # if page_watch_playlist.current_window_handle == os.environ['channel_2']:
+        #     page_watch_playlist.switch_to_window(os.environ['channel_1'])
+        #     os.environ['current_playlist'] = channel_1
+        # elif page_watch_playlist.current_window_handle == os.environ['channel_1']:
+        #     page_watch_playlist.switch_to_window(os.environ['channel_2'])
+        #     os.environ['current_playlist'] = channel_2
+        # print("After switch")
+        # print(f"current_handle={page_watch_playlist.current_window_handle}")
 
         if not page_watch_playlist.current_playlist_matches(os.environ['current_playlist']):
             break
