@@ -172,7 +172,6 @@ def watch_nrobo_playlist(driver, logger):
     page_youtube_home_auth = PageYouTube(driver, logger)
     page_youtube_home_auth.wait_for_a_while(page_youtube_home_auth.generate_random_numbers(5, 7))
 
-    win_handle = f"{page_youtube_home_auth.driver}"
     if page_youtube_home_auth.current_window_handle == os.environ['channel_2']:
         page_youtube_home_auth.switch_to_window(os.environ['channel_1'])
         os.environ['current_playlist'] = channel_1
@@ -180,7 +179,6 @@ def watch_nrobo_playlist(driver, logger):
         page_youtube_home_auth.switch_to_window(os.environ['channel_2'])
         os.environ['current_playlist'] = channel_2
 
-    win_handle = win_handle + f"\n{page_youtube_home_auth.driver}"
     page_youtube_home_auth = PageYouTube(driver, logger)
 
     if page_youtube_home_auth.current_window_handle == os.environ['channel_1']:
@@ -198,7 +196,14 @@ def watch_nrobo_playlist(driver, logger):
     while True:
         page_watch_playlist.click_like_video()
         page_watch_playlist.click_volume_control_and_set_playback_speed_2x()
-        page_watch_playlist.wait_for_a_while(3 * 60 * 60)  # 3 hour
+        page_watch_playlist.wait_for_a_while(30 * 60)  # 30 min
+
+        if page_watch_playlist.current_window_handle == os.environ['channel_2']:
+            page_watch_playlist.switch_to_window(os.environ['channel_1'])
+            os.environ['current_playlist'] = channel_1
+        elif page_watch_playlist.current_window_handle == os.environ['channel_1']:
+            page_watch_playlist.switch_to_window(os.environ['channel_2'])
+            os.environ['current_playlist'] = channel_2
 
         if not page_watch_playlist.current_playlist_matches(os.environ['current_playlist']):
             break
