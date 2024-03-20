@@ -3,6 +3,7 @@ import os
 import pytest
 from nrobo.util.common import Common
 
+from pages import Page
 from pages.linkedin.auth.home.post_modal import PagePostModal
 from pages.linkedin.public.PageHomePublic import PageHomePublic
 from pages.youtube.auth.playlists import PagePlaylists
@@ -12,7 +13,6 @@ from pages.youtube.public.gmail_login import PageGmailLogin
 
 counter_file = "Counter.yaml"
 count_groups = "count_groups"
-titles = ['youtube_1', 'youtube_2']
 
 cred_yaml_file = 'cred.yaml'
 test_data_yaml_file = 'test_data.yaml'
@@ -145,13 +145,14 @@ class TestPostAndShareNRoBoUpdates:
         try:
             page_gmail_password.password(password)
             page_gmail_mailbox = page_gmail_password.next()
-            page_gmail_mailbox.title = titles[0]
             page_youtube = page_gmail_mailbox.open_youtube_url()
+            os.environ['channel_1'] = page_youtube.current_window_handle
 
             # open new window for Panchdev Singh Chauhan channel
-            page_youtube.switch_to_new_tab()
-            page_youtube.title = titles[1]
+            page_youtube.switch_to_new_window()
+            page_youtube.maximize_window()
             page_youtube = page_gmail_mailbox.open_youtube_url()
+            os.environ['channel_2'] = page_youtube.current_window_handle
         except Exception as e:
             pass
 
@@ -171,12 +172,16 @@ def watch_nrobo_playlist(driver, logger):
     page_youtube_home_auth = PageYouTube(driver, logger)
     page_youtube_home_auth.wait_for_a_while(page_youtube_home_auth.generate_random_numbers(5, 7))
 
+    win_handle = f"{page_youtube_home_auth.driver}"
     if page_youtube_home_auth.current_window_handle == os.environ['channel_2']:
-        page_youtube_home_auth.switch_to_window(page_youtube_home_auth.windows[titles[0]])
+        page_youtube_home_auth.switch_to_window(os.environ['channel_1'])
         os.environ['current_playlist'] = channel_1
     elif page_youtube_home_auth.current_window_handle == os.environ['channel_1']:
-        page_youtube_home_auth.switch_to_window(page_youtube_home_auth.windows[titles[1]])
+        page_youtube_home_auth.switch_to_window(os.environ['channel_2'])
         os.environ['current_playlist'] = channel_2
+
+    win_handle = win_handle + f"\n{page_youtube_home_auth.driver}"
+    page_youtube_home_auth = PageYouTube(driver, logger)
 
     if page_youtube_home_auth.current_window_handle == os.environ['channel_1']:
         page_playlists = page_youtube_home_auth.search(keyword=channel_1_keyword, channel_name=channel_1)
