@@ -19,6 +19,10 @@ class PagePlaylists(Page):
     # Page methods
     def click_link_view_full_playlist(self, channel_name: str = None):
         """Click on View nRoBo full playlist"""
+
+        if 'Singh' in channel_name:
+            return
+
         lnk_view_nrobo_full_playlist = (By.XPATH,
                                         f"//div[contains(@class,'ytd-grid-playlist-rendere')]"
                                         f"/h3/a[@title='{channel_name}']")
