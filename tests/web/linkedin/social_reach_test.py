@@ -150,7 +150,7 @@ class TestPostAndShareNRoBoUpdates:
 
             # open new window for Panchdev Singh Chauhan channel
             page_youtube.switch_to_new_window()
-            #page_youtube.maximize_window()
+            page_youtube.maximize_window()
             page_youtube = page_gmail_mailbox.open_youtube_url()
             os.environ['channel_2'] = page_youtube.current_window_handle
         except Exception as e:

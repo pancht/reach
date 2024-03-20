@@ -31,7 +31,6 @@ class PageYouTube(Page):
         self.wait_for_page_to_be_loaded()
 
         link_channel_search_result = (By.XPATH, f"//ytd-channel-renderer//yt-formatted-string[text()='{channel_name}']")
-        self.wait_for_a_while(10)
         self.click(*link_channel_search_result)
         self.wait_for_page_to_be_loaded()
 
