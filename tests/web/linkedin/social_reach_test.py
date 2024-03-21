@@ -208,7 +208,8 @@ def watch_nrobo_playlist(driver, logger):
         try:
             page_watch_playlist.click_like_video()
             page_watch_playlist.click_volume_control_and_set_playback_speed_2x()
-            page_watch_playlist.wait_for_a_while(60 * 60)  # 1 hour
+            from nrobo.util.common import Common
+            page_watch_playlist.wait_for_a_while(Common.generate_random_numbers(25, 35))  # 25-35 min approx.
         except Exception as e:
             pass
 
